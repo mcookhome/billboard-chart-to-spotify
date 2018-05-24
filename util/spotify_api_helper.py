@@ -14,6 +14,7 @@ def create_spotify_instance(username):
         print("Can't get token for", username)
 
 def search_billboard(sp, query):
+    print("Query: " + query)
     results = sp.search(query, limit=1, type='track')
     return results
 
