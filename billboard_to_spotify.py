@@ -22,15 +22,18 @@ def convert_chart_to_uri_list(sp, chart):
         name_and_partial_artist_query = name_query + " " + " ".join(track.artist.split(" ")[0:2])
         #print(name_and_artist_query)
         queries = [name_query, name_and_artist_query, name_and_partial_artist_query]
-        all_results = [{query: spotify_api_helper.search_billboard(sp, query)} for query in queries]
-        just_results = [result.values() for result in all_results]
-        print(just_results)
-        #all_results = [{"query": result["query"], "result": result["result"]["tracks"]["items"][0]["name"]} for result in all_results if len(result["result"]["tracks"]["items"]) == 1]
+        all_results = [{"query": query, "result" : spotify_api_helper.search_billboard(sp, query)} for query in queries]
+        for entry in all_results:
+            result = entry["result"]
+            query = entry["query"]
+            print(query)
+            if len(result["tracks"]["items"]) == 1:
+                print(query + ": " + result["tracks"]["items"][0]["name"])
 
-        print(all_results)
-        results = spotify_api_helper.search_billboard(sp, name_query)
+        #print(all_results)
+        results = spotify_api_helper.search_billboard(sp, name_and_partial_artist_query)
         if len(results["tracks"]["items"]) == 0:
-            print("Could not find a Spotify track for this query: " + name_query)
+            print("Could not find a Spotify track for this query: " + name_and_partial_artist_query)
             count_not_found = count_not_found + 1
         else:
             track = results["tracks"]["items"][0]
@@ -43,5 +46,5 @@ def convert_chart_to_uri_list(sp, chart):
 
 if __name__ == '__main__':
     chart_name = 'hot-100'
-    date = "1978-08-25"
+    date = "2000-01-01"
     run(chart_name, date)
