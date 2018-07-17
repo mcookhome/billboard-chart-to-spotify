@@ -3,6 +3,7 @@ import argparse
 from util import spotify_api_helper
 import re
 import collections
+import sys
 
 DEFAULT_USERNAME = "mcookhome"
 
@@ -15,9 +16,10 @@ def run(chart_name, date):
     spotify_api_helper.add_tracks(sp, DEFAULT_USERNAME, playlist_id, track_uris)
     print("Otherwise, the playlist '" + playlist_name + "' should be created in your Spotify client!")
 
-def run_with_auth_token(chart_name, date, auth_token):
+def run_with_access_token(chart_name, date, access_token):
     chart = billboard.ChartData(chart_name, date=date)
-    sp = spotify_api_helper.create_spotify_instance_with_auth_token(auth_token)
+    print >>sys.stderr, str(chart)
+    sp = spotify_api_helper.create_spotify_instance_with_access_token(access_token)
     username = spotify_api_helper.get_username(sp)
     track_uris = convert_chart_to_uri_list(sp, chart)
     playlist_name = chart_name + " from " + date

@@ -13,15 +13,15 @@ def create_spotify_instance(username):
     else:
         print("Can't get token for", username)
 
-def create_spotify_instance_with_auth_token(auth_token):
-    if auth_token:
-        return spotipy.Spotify(auth=auth_token)
+def create_spotify_instance_with_access_token(access_token):
+    if access_token:
+        return spotipy.Spotify(auth=access_token)
     else:
         print("No token")
 
 def get_username(sp):
     result = sp.me()
-    return result
+    return result['id']
 
 def search_billboard(sp, query):
     #print("Query: " + query)
@@ -33,6 +33,7 @@ def create_playlist(sp, username, playlist_name):
     return result["id"]
 
 def add_tracks(sp, username, playlist_id, tracks):
+    print >>sys.stderr, str(tracks)
     result = sp.user_playlist_add_tracks(username, playlist_id, tracks)
     return result
 

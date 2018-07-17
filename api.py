@@ -4,7 +4,11 @@ import sys
 import random
 from flask import Flask, request
 from urllib import quote
-from billboard_to_spotify import run_with_auth_token 
+from billboard_to_spotify import run_with_access_token 
+from credentials import get_secret
+import base64
+import requests
+import json
 
 api = Flask(__name__)
 
@@ -12,6 +16,7 @@ REDIRECT_URI = "http://mcook.me/billboard-to-spotify/callback"
 SCOPE = "playlist-modify-public user-library-read user-read-email"
 CLIENT_ID = "7ec9f8e4b6af41119d5029fa80ebf0b2"
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
+SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
 
 auth_query_parameters = {
@@ -31,14 +36,34 @@ def authorize():
     auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
     return auth_url
 
+@api.route("/v1/gain-access", methods=['POST'])
+def access():
+    auth_token = request.form["auth_token"]
+    code_payload = {
+        "grant_type": "authorization_code",
+        "code": str(auth_token),
+        "redirect_uri": REDIRECT_URI
+    }
+    base64encoded = base64.b64encode("{}:{}".format(CLIENT_ID, get_secret()))
+    headers = {"Authorization": "Basic {}".format(base64encoded)}
+    post_request = requests.post(SPOTIFY_TOKEN_URL, data=code_payload, headers=headers)
+
+    response_data = json.loads(post_request.text)
+    access_token = response_data["access_token"]
+    refresh_token = response_data["refresh_token"]
+    token_type = response_data["token_type"]
+    expires_in = response_data["expires_in"]
+    return access_token
+
+
 @api.route("/v1/bts", methods=['POST'])
 def bts():
     print >>sys.stderr, str(request.form)
-    print >>sys.stderr, request.form["auth_token"]
+    print >>sys.stderr, request.form["access_token"]
     chart = request.form["chart"]
-    auth_token = request.form["auth_token"].encode('ascii', 'ignore')
+    access_token = request.form["access_token"]
     date = request.form["date"]
-    run_with_auth_token(chart, date, auth_token) 
+    run_with_access_token(chart, date, access_token) 
     
 
 if __name__ == "__main__":
