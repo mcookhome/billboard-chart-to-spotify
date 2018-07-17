@@ -15,6 +15,16 @@ def run(chart_name, date):
     spotify_api_helper.add_tracks(sp, DEFAULT_USERNAME, playlist_id, track_uris)
     print("Otherwise, the playlist '" + playlist_name + "' should be created in your Spotify client!")
 
+def run_with_auth_token(chart_name, date, auth_token):
+    chart = billboard.ChartData(chart_name, date=date)
+    sp = spotify_api_helper.create_spotify_instance_with_auth_token(auth_token)
+    username = spotify_api_helper.get_username(sp)
+    track_uris = convert_chart_to_uri_list(sp, chart)
+    playlist_name = chart_name + " from " + date
+    playlist_id = spotify_api_helper.create_playlist(sp, username, playlist_name)
+    spotify_api_helper.add_tracks(sp, username, playlist_id, track_uris)
+    print("Otherwise, the playlist '" + playlist_name + "' should be created in your Spotify client!")
+
 def convert_chart_to_uri_list(sp, chart):
     track_uris = []
     count_not_found = 0

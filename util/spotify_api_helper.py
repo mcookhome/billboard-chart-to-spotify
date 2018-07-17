@@ -13,6 +13,16 @@ def create_spotify_instance(username):
     else:
         print("Can't get token for", username)
 
+def create_spotify_instance_with_auth_token(auth_token):
+    if auth_token:
+        return spotipy.Spotify(auth=auth_token)
+    else:
+        print("No token")
+
+def get_username(sp):
+    result = sp.me()
+    return result
+
 def search_billboard(sp, query):
     #print("Query: " + query)
     results = sp.search(query, limit=1, type='track')
