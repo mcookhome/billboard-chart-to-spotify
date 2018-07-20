@@ -13,7 +13,7 @@ import json
 api = Flask(__name__)
 
 REDIRECT_URI = "http://mcook.me/billboard-to-spotify/callback"
-SCOPE = "playlist-modify-public user-library-read user-read-email"
+SCOPE = "playlist-modify-public user-read-email"
 CLIENT_ID = "7ec9f8e4b6af41119d5029fa80ebf0b2"
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"

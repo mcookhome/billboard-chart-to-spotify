@@ -4,7 +4,7 @@ import spotipy.util as util
 
 DEFAULT_USERNAME = "mcookhome"
 def create_spotify_instance(username):
-    scope = 'playlist-modify-public user-library-read'
+    scope = 'playlist-modify-public'
 
     token = util.prompt_for_user_token(username, scope)
 
@@ -33,10 +33,7 @@ def create_playlist(sp, username, playlist_name):
     return result
 
 def add_tracks(sp, username, playlist_id, tracks):
-    print >>sys.stderr, str(tracks)
-    print >>sys.stderr, "HEREEEEE"
     result = sp.user_playlist_add_tracks(username, playlist_id, tracks)
-    print >>sys.stderr, "HEREEEEE"
     return result
 
 def run(username):
