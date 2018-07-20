@@ -55,19 +55,13 @@ def access():
     expires_in = response_data["expires_in"]
     return access_token
 
-
 @api.route("/v1/bts", methods=['POST'])
 def bts():
-    print >>sys.stderr, str(request.form)
-    print >>sys.stderr, request.form["access_token"]
     chart = request.form["chart"]
     access_token = request.form["access_token"]
     date = request.form["date"] 
-    print >>sys.stderr, "BOOO"
-    boo = run_with_access_token(chart, date, access_token) 
-    print >>sys.stderr, "BOOO: " + boo
-    return boo
-    
+    playlist_url = run_with_access_token(chart, date, access_token) 
+    return playlist_url
 
 if __name__ == "__main__":
     api.run(debug=True)
