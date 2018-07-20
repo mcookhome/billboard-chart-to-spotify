@@ -30,7 +30,7 @@ auth_query_parameters = {
 
 @api.route("/v1/authorization", methods=['GET'])
 def authorize():
-    """ Route to define my billboard-to-spotify page, handling get and post requests """
+    """ Route to create a Spotify URL that will lead users to an authorization page """
     
     url_args = "&".join(["{}={}".format(key,quote(val)) for key,val in auth_query_parameters.iteritems()])
     auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
@@ -38,6 +38,8 @@ def authorize():
 
 @api.route("/v1/gain-access", methods=['POST'])
 def access():
+    """ Route to get an access token from Spotify """
+
     auth_token = request.form["auth_token"]
     code_payload = {
         "grant_type": "authorization_code",
@@ -57,6 +59,8 @@ def access():
 
 @api.route("/v1/bts", methods=['POST'])
 def bts():
+    """ Route to expose my billboard-to-spotify program, handling post requests """
+
     chart = request.form["chart"]
     access_token = request.form["access_token"]
     date = request.form["date"] 
