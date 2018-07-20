@@ -17,15 +17,15 @@ def run(chart_name, date):
     print("Otherwise, the playlist '" + playlist_name + "' should be created in your Spotify client!")
 
 def run_with_access_token(chart_name, date, access_token):
-    chart = billboard.ChartData(chart_name, date=date)
-    print >>sys.stderr, str(chart)
+    chart = billboard.ChartData(chart_name, date=date.encode('ascii','ignore'))
     sp = spotify_api_helper.create_spotify_instance_with_access_token(access_token)
     username = spotify_api_helper.get_username(sp)
     track_uris = convert_chart_to_uri_list(sp, chart)
     playlist_name = chart_name + " from " + date
-    playlist_id = spotify_api_helper.create_playlist(sp, username, playlist_name)
-    spotify_api_helper.add_tracks(sp, username, playlist_id, track_uris)
+    playlist = spotify_api_helper.create_playlist(sp, username, playlist_name)
+    spotify_api_helper.add_tracks(sp, username, playlist["id"], track_uris)
     print("Otherwise, the playlist '" + playlist_name + "' should be created in your Spotify client!")
+    return playlist["external_urls"]["spotify"]
 
 def convert_chart_to_uri_list(sp, chart):
     track_uris = []

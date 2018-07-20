@@ -62,8 +62,11 @@ def bts():
     print >>sys.stderr, request.form["access_token"]
     chart = request.form["chart"]
     access_token = request.form["access_token"]
-    date = request.form["date"]
-    run_with_access_token(chart, date, access_token) 
+    date = request.form["date"] 
+    print >>sys.stderr, "BOOO"
+    boo = run_with_access_token(chart, date, access_token) 
+    print >>sys.stderr, "BOOO: " + boo
+    return boo
     
 
 if __name__ == "__main__":

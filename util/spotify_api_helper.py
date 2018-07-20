@@ -30,11 +30,13 @@ def search_billboard(sp, query):
 
 def create_playlist(sp, username, playlist_name):
     result = sp.user_playlist_create(username, playlist_name)
-    return result["id"]
+    return result
 
 def add_tracks(sp, username, playlist_id, tracks):
     print >>sys.stderr, str(tracks)
+    print >>sys.stderr, "HEREEEEE"
     result = sp.user_playlist_add_tracks(username, playlist_id, tracks)
+    print >>sys.stderr, "HEREEEEE"
     return result
 
 def run(username):
