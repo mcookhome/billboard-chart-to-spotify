@@ -36,9 +36,10 @@ def convert_chart_to_uri_list(sp, chart):
     for track in chart:
         print(str(chart_num) + ": ")
         print(track)
-        name_query = re.sub(r" ?\([^)]+\)", "", track.title)
-        artist = re.sub('".*?"', '', track.artist)
+        name_query = re.sub(r" ?\([^)]+\)", "", track.title.lower())
+        artist = re.sub('".*?"', '', track.artist.lower())
         artist = "".join(artist.split("*"))
+        artist = "".join(artist.split("featuring "))
         name_and_artist_query = name_query + " - " + artist
         name_and_two_word_artist_query = name_query + " " + " ".join(artist.split(" ")[0:2])
         name_and_one_word_artist_query = name_query + " " + " ".join(artist.split(" ")[0:1])
